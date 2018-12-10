@@ -1,0 +1,52 @@
+jobs:
+
+- job: 'BrowserTests_Linux'
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js v10'
+  - task: Npm@0
+    inputs:
+      command: install
+  - script: Xvfb :99 &
+    displayName: 'Start Xvfb'
+  - script: DISPLAY=:99 npm test
+    displayName: 'Run the tests on Firefox and Chrome'
+
+- job: 'BrowserTests_macOS'
+  pool:
+    vmImage: 'macOS-10.13'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js v10'
+  - task: Npm@0
+    inputs:
+      command: install
+  - script: npm test
+    displayName: 'Run the tests on Safari'
+
+- job: 'BrowserTests_Windows'
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+  - script: choco install firefox
+    displayName: 'Install the latest Firefox'
+  - script: choco install chromium
+    displayName: 'Install the latest Chromium'
+  - script: set CHROME_BIN="C:\Program Files (x86)\Chromium\Application\chrome.exe"
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js v10'
+  - task: Npm@0
+    inputs:
+      command: install
+  - script: git config --local core.autocrlf false && git checkout -f
+    displayName: 'Ensure proper line endings on Windows'
+  - script: npm test
+    displayName: 'Run browser tests on Internet Explorer, Firefox, and Chrome'
