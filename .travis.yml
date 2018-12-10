@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+  - "8"
+  - "10"
+os:
+  - linux
+  - osx
+  - windows
+
+script: "npm run cli-tests"
+
+jobs:
+  include:
+    - stage: Browser Tests
+      node_js: "10"
+      os: osx
+      script: "npm run browser-tests"
+    - stage: Browser Tests
+      node_js: "10"
+      os: linux
+      script: "xvfb-run npm run browser-tests"
+    - stage: Browser Tests
+      node_js: "10"
+      os: windows
+      before_script:
+        - choco install firefox
+        - choco install chromium
+      script: "npm run browser-tests"
