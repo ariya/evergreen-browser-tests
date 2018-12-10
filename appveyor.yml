@@ -1,0 +1,22 @@
+version: "{build}"
+
+environment:
+  nodejs_version: "11"
+
+matrix:
+  fast_finish: true
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - cmd: choco install firefox
+  - cmd: choco install chromium
+
+before_test:
+  - node --version
+  - npm --version
+  - npm install
+
+test_script:
+  - npm test
+
+build: off
