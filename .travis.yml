@@ -19,10 +19,3 @@ jobs:
       node_js: "10"
       os: linux
       script: "xvfb-run npm run browser-tests"
-    - stage: Browser Tests
-      node_js: "10"
-      os: windows
-      before_script:
-        - choco install firefox
-        - choco install chromium
-      script: "npm run browser-tests"
