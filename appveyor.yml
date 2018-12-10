@@ -1,5 +1,9 @@
 version: "{build}"
 
+image:
+  - Visual Studio 2015
+  - Ubuntu
+
 environment:
   nodejs_version: "11"
 
@@ -7,7 +11,10 @@ matrix:
   fast_finish: true
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: |
+      if ($isWindows) {
+        Install-Product node $env:nodejs_version
+      }
   - cmd: choco install firefox
   - cmd: choco install chromium
 
@@ -17,6 +24,7 @@ before_test:
   - npm install
 
 test_script:
-  - npm test
+  - cmd: npm test
+  - sh: xvfb-run npm test
 
 build: off
